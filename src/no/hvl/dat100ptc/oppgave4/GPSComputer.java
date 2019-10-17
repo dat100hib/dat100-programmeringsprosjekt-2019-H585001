@@ -1,5 +1,7 @@
 package no.hvl.dat100ptc.oppgave4;
 
+import java.util.Arrays;
+
 import no.hvl.dat100ptc.TODO;
 import no.hvl.dat100ptc.oppgave1.GPSPoint;
 import no.hvl.dat100ptc.oppgave2.GPSData;
@@ -32,9 +34,14 @@ public class GPSComputer {
 		double distance = 0;
 
 		// TODO - START
-
-		throw new UnsupportedOperationException(TODO.method());
-
+		
+		for (int i = 0; i < gpspoints.length -1; i++) {
+			
+			distance += GPSUtils.distance(gpspoints[i], gpspoints[i+1]);
+			
+		}
+		return distance;
+		
 		// TODO - SLUTT
 
 	}
@@ -45,27 +52,42 @@ public class GPSComputer {
 		double elevation = 0;
 
 		// TODO - START
-
-		throw new UnsupportedOperationException(TODO.method());
+		
+		for (int i = 0; i < gpspoints.length -1; i++) {
+			
+			if (gpspoints[i+1].getElevation() > gpspoints[i].getElevation()) {
+			elevation += gpspoints[i+1].getElevation() - gpspoints[i].getElevation();
+			}
+		}
 
 		// TODO - SLUTT
+		
+		return elevation;
 
 	}
 
 	// beregn total tiden for hele turen (i sekunder)
 	public int totalTime() {
 
-		throw new UnsupportedOperationException(TODO.method());
+		int time = gpspoints[gpspoints.length-1].getTime() - gpspoints[0].getTime();
+		
+		return time;
 
 	}
-		
 	// beregn gjennomsnitshastighets mellom hver av gps punktene
 
 	public double[] speeds() {
 		
 		// TODO - START		// OPPGAVE - START
 		
-		throw new UnsupportedOperationException(TODO.method());
+		double[] tabell = new double[gpspoints.length -1];
+		
+		for (int i = 0; i < tabell.length; i++) {
+			
+			tabell[i] = GPSUtils.speed(gpspoints[i], gpspoints[i+1]);
+			
+		}
+		return tabell;
 
 		// TODO - SLUTT
 
@@ -77,8 +99,11 @@ public class GPSComputer {
 		
 		// TODO - START
 		
-		throw new UnsupportedOperationException(TODO.method());
+		double[] tabell = speeds();
+		Arrays.sort(tabell);
+		maxspeed =  tabell[tabell.length -1];
 		
+		return maxspeed;
 		// TODO - SLUTT
 		
 	}
@@ -89,10 +114,10 @@ public class GPSComputer {
 		
 		// TODO - START
 		
-		throw new UnsupportedOperationException(TODO.method());
+		average = (totalDistance() / totalTime()) * 3.6;
+		return average;
 		
 		// TODO - SLUTT
-		
 	}
 
 	/*
@@ -117,8 +142,22 @@ public class GPSComputer {
 		double speedmph = speed * MS;
 
 		// TODO - START
+		if (speedmph > 20) {
+			met = 16.0;
+		} else if (16 < speedmph) {
+			met = 12.0;
+		} else if (14 < speedmph) {
+			met = 10.0;
+		} else if (12 < speedmph) {
+			met = 8.0;
+		} else if (10 < speedmph) {
+			met = 6.0;
+		} else {
+			met = 4.0;}
 		
-		throw new UnsupportedOperationException(TODO.method());
+		kcal = met * weight * (secs / 3600.0);
+		
+		return kcal;
 
 		// TODO - SLUTT
 		
@@ -130,7 +169,15 @@ public class GPSComputer {
 
 		// TODO - START
 		
-		throw new UnsupportedOperationException(TODO.method());
+		for (int i = 0; i < gpspoints.length -1; i++) {
+			
+			int time = gpspoints[i+1].getTime() - gpspoints[i].getTime();
+			double speed = speeds()[i];
+			totalkcal += kcal(weight, time, speed);
+			
+		}
+		
+		return totalkcal;
 
 		// TODO - SLUTT
 		
@@ -138,14 +185,28 @@ public class GPSComputer {
 	
 	private static double WEIGHT = 80.0;
 	
-	public void displayStatistics() {
+	public String[] displayStatistics() {
 
-		System.out.println("==============================================");
 
 		// TODO - START
-
-		throw new UnsupportedOperationException(TODO.method());
+		String[] outString = new String[8];
 		
+		outString[0] = "==============================================";
+		outString[1] = "Total Time \t:\t" + GPSUtils.formatTime(totalTime());
+		outString[2] = "Total Distance \t:\t" + GPSUtils.formatDouble(totalDistance()/1000) + " km";
+		outString[3] = "Total Elevation : \t" + GPSUtils.formatDouble(totalElevation()) + " m";
+		outString[4] = "Max Speed \t:\t" + GPSUtils.formatDouble(maxSpeed()) + " km/t";
+		outString[5] = "Average Speed \t:\t" + GPSUtils.formatDouble(averageSpeed()) + " km/t";
+		outString[6] = "Energy \t\t:\t" + GPSUtils.formatDouble(totalKcal(WEIGHT)) + " kcal";
+		outString[7] = "==============================================";
+		
+		for (int i = 0; i < outString.length; i++) {
+			
+			System.out.println(outString[i]);
+			
+		}
+		
+		return outString;
 		// TODO - SLUTT
 		
 	}

@@ -12,7 +12,7 @@ public class ShowRoute extends EasyGraphics {
 
 	private static int MARGIN = 50;
 	private static int MAPXSIZE = 800;
-	private static int MAPYSIZE = 800;
+	private static int MAPYSIZE = 600;
 
 	private GPSPoint[] gpspoints;
 	private GPSComputer gpscomputer;
@@ -59,7 +59,12 @@ public class ShowRoute extends EasyGraphics {
 		
 		// TODO - START
 		
-		throw new UnsupportedOperationException(TODO.method());
+		double maxlat = GPSUtils.findMax(GPSUtils.getLatitudes(gpspoints));
+		double minlat = GPSUtils.findMin(GPSUtils.getLatitudes(gpspoints));
+
+		ystep = MAPYSIZE / (Math.abs(maxlat - minlat)); 
+
+		return ystep;
 
 		// TODO - SLUTT
 		
@@ -69,7 +74,24 @@ public class ShowRoute extends EasyGraphics {
 
 		// TODO - START
 		
-		throw new UnsupportedOperationException(TODO.method());
+		for (int i= 0; i < gpspoints.length; i++) {
+			
+		int x = (int)(MARGIN + xstep() * (gpspoints[i].getLongitude() - gpspoints[0].getLongitude()));
+		int y = (int)(ystep() * (gpspoints[i].getLatitude() - gpspoints[0].getLatitude()));
+		
+		setColor(255,165,0);
+		fillCircle(x, 150 - y ,4);
+		}
+		
+		for (int i= 0; i < gpspoints.length-1; i++) {
+			
+			int x = (int)(MARGIN + xstep() * (gpspoints[i].getLongitude() - gpspoints[0].getLongitude()));
+			int y = (int)(ystep() * (gpspoints[i].getLatitude() - gpspoints[0].getLatitude()));
+			int x2 = (int)(MARGIN + xstep() * (gpspoints[i+1].getLongitude() - gpspoints[0].getLongitude()));
+			int y2 = (int)(ystep() * (gpspoints[i+1].getLatitude() - gpspoints[0].getLatitude()));
+			setColor(255,165,0);
+			drawLine(x, 150 - y, x2, 150 - y2);
+			}
 		
 		// TODO - SLUTT
 	}
@@ -83,7 +105,15 @@ public class ShowRoute extends EasyGraphics {
 		
 		// TODO - START
 		
-		throw new UnsupportedOperationException(TODO.method());
+		String[] tabell = gpscomputer.displayStatistics();
+		
+		int y = 30;
+for (int i = 1; i < tabell.length-1; i++) {
+			
+			drawString(tabell[i], MARGIN - 10, y);
+			
+			y += 20;
+		}
 		
 		// TODO - SLUTT;
 	}
@@ -92,7 +122,7 @@ public class ShowRoute extends EasyGraphics {
 
 		// TODO - START
 		
-		throw new UnsupportedOperationException(TODO.method());
+		
 		
 		// TODO - SLUTT
 	}

@@ -27,18 +27,32 @@ public class GPSUtils {
 		double min;
 
 		// TODO - START
-
-		throw new UnsupportedOperationException(TODO.method());
+		
+		min = da[0];
+		
+		for (double d : da) {
+			if (d < min) {
+				min = d;
+			}
+		}
+		
+		return min;
 
 		// TODO - SLUT
 
-	}
+	} 
 
 	public static double[] getLatitudes(GPSPoint[] gpspoints) {
 
 		// TODO - START
 		
-		throw new UnsupportedOperationException(TODO.method());
+		double[] tabell = new double[gpspoints.length];
+		
+		for (int i = 0; i < tabell.length; i++) {
+			tabell[i] = gpspoints[i].getLatitude();
+		}
+		
+		return tabell;	
 		
 		// TODO - SLUTT
 	}
@@ -46,11 +60,16 @@ public class GPSUtils {
 	public static double[] getLongitudes(GPSPoint[] gpspoints) {
 
 		// TODO - START
-
-		throw new UnsupportedOperationException(TODO.method());
+		
+		double[] tabell = new double[gpspoints.length];
+		
+		for (int i = 0; i < tabell.length; i++) {
+			tabell[i] = gpspoints[i].getLongitude();
+		}
+		return tabell;
 		
 		// TODO - SLUTT
-
+		
 	}
 
 	private static int R = 6371000; // jordens radius
@@ -62,7 +81,19 @@ public class GPSUtils {
 
 		// TODO - START
 
-		throw new UnsupportedOperationException(TODO.method());
+		latitude1 = toRadians(gpspoint1.getLatitude());
+		latitude2 = toRadians(gpspoint2.getLatitude());
+		longitude1 =toRadians(gpspoint1.getLongitude());
+		longitude2 =toRadians(gpspoint2.getLongitude());
+		
+		double lati = latitude2 - latitude1;
+		double longi = longitude2 - longitude1;
+		
+		double a = pow(sin(lati / 2),2) + cos(latitude1) * cos(latitude2) * pow(sin(longi / 2),2);
+		double c = 2 * atan2(sqrt(a),sqrt(1-a));
+		d = R * c;
+		
+		return d;
 
 		// TODO - SLUTT
 
@@ -75,7 +106,11 @@ public class GPSUtils {
 
 		// TODO - START
 
-		throw new UnsupportedOperationException(TODO.method());
+		double distance = distance(gpspoint1, gpspoint2);
+		secs = gpspoint2.getTime() - gpspoint1.getTime();
+		speed = (distance / secs) * 3.6;
+		
+		return speed;
 
 		// TODO - SLUTT
 
@@ -88,7 +123,14 @@ public class GPSUtils {
 
 		// TODO - START
 
-		throw new UnsupportedOperationException(TODO.method());
+		int h = secs / 3600;
+		int m = (secs % 3600) / 60;
+		int s = secs % 60;
+		
+		timestr = String.format("%02d" + TIMESEP + "%02d" + TIMESEP + "%02d", h, m, s);
+		timestr = String.format("%1$10s", timestr);
+		
+		return timestr;
 		
 		// TODO - SLUTT
 
@@ -100,8 +142,11 @@ public class GPSUtils {
 		String str;
 
 		// TODO - START
-
-		throw new UnsupportedOperationException(TODO.method());
+		
+		String dRound = String.format("%.2f", d).replace(',', '.');
+		str = String.format("%1$" + TEXTWIDTH + "s", dRound);
+		
+		return str;
 
 		// TODO - SLUTT
 		
